@@ -20,6 +20,8 @@ services:
         fromDatabase:
           name: procurement-db
           property: connectionString
+      - key: INITIAL_ADMIN_PASSWORD
+        generateValue: true
 
 databases:
   - name: procurement-db
