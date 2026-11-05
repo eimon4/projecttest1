@@ -4,8 +4,7 @@ services:
     runtime: node
     plan: free
     buildCommand: npm run setup && npm run build
-    startCommand: npm start
-    preDeployCommand: npm run db:init
+    startCommand: npm run db:init && npm start
     envVars:
       - key: NODE_ENV
         value: production
