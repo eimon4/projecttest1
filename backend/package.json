@@ -1,0 +1,20 @@
+{
+  "name": "procurement-api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/server.mjs",
+    "start": "node src/server.mjs",
+    "db:init": "node scripts/migrate.mjs",
+    "create-admin": "node scripts/admin.mjs"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "pg": "^8.13.1",
+    "dotenv": "^16.4.7",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "helmet": "^8.0.0",
+    "multer": "^2.0.2"
+  }
+}

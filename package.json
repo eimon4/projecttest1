@@ -1,0 +1,17 @@
+{
+  "name": "office-procurement",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "setup": "npm --prefix backend install && npm --prefix frontend install",
+    "dev": "concurrently \"npm --prefix backend run dev\" \"npm --prefix frontend run dev\"",
+    "build": "npm --prefix frontend run build",
+    "start": "npm --prefix backend start",
+    "db:init": "npm --prefix backend run db:init",
+    "create-admin": "npm --prefix backend run create-admin --",
+    "test": "node --test backend/test/*.test.mjs"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
