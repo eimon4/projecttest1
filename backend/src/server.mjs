@@ -12,14 +12,17 @@ import {check,text,id,qty,money,day,normalizeQuote,totals,clientQuote,room,remai
 const app=express();
 const base=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const uploadDir=path.join(base,'uploads');await mkdir(uploadDir,{recursive:true});
-if(process.env.TRUST_PROXY==='true')app.set('trust proxy',1);
+if(process.env.TRUST_PROXY==='true'||process.env.RENDER==='true')app.set('trust proxy',1);
 app.disable('x-powered-by');app.use(helmet());app.use(express.json({limit:'2mb'}));app.use(cookieParser());
 const hash=x=>createHash('sha256').update(x).digest('hex');
 const secure=process.env.NODE_ENV==='production';
 const cookieOptions={httpOnly:true,sameSite:'strict',secure,path:'/'};
-const origin=process.env.APP_ORIGIN||'http://localhost:5173';
+const configuredOrigins=(process.env.APP_ORIGIN||'').split(',').map(s=>s.trim()).filter(Boolean);
+const allowedOrigins=new Set([...configuredOrigins,process.env.RENDER_EXTERNAL_URL,'http://localhost:5173','http://127.0.0.1:5173'].filter(Boolean));
 app.use('/api',(req,res,next)=>{
- if(!['GET','HEAD','OPTIONS'].includes(req.method)&&req.get('origin')!==origin)return res.status(403).json({error:'Untrusted browser origin. Check APP_ORIGIN in backend/.env.'});next();
+ const reqOrigin=req.get('origin');
+ if(!['GET','HEAD','OPTIONS'].includes(req.method)&&reqOrigin&&!allowedOrigins.has(reqOrigin))return res.status(403).json({error:'Untrusted browser origin. Check APP_ORIGIN in backend/.env.'});
+ next();
 });
 const route=fn=>(req,res,next)=>Promise.resolve(fn(req,res)).catch(next);
 const loginAttempts=new Map();
